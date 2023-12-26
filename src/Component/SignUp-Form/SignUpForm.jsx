@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import FormInput from '../Form-Input/FormInput';
-import { createAuthUserEmailAndPassword,createUserDocumentFromAuth } from '../../Utils/Firebase/FirebaseUtils';
+import Button from '../Button/Button';
+import { createAuthUserEmailAndPassword, createUserDocumentFromAuth } from '../../Utils/Firebase/FirebaseUtils';
+import './SignUpForm.scss'
 const defaultFormFields = {
   displayName: '',
   email: '',
   password: '',
   confirmPassword: ''
 }
+
 const SignUpForm = () => {
   const [formFields, setFormFiedls] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  console.log(formFields);
-
   const resetFormFields = () => {
-      setFormFiedls(defaultFormFields)
+    setFormFiedls(defaultFormFields)
   }
 
   const handleSubmit = async (event) => {
@@ -25,14 +26,14 @@ const SignUpForm = () => {
       return;
     }
     try {
-      const {user} = await createAuthUserEmailAndPassword(email, password);
-      await createUserDocumentFromAuth(user, {displayName})
+      const { user } = await createAuthUserEmailAndPassword(email, password);
+      await createUserDocumentFromAuth(user, { displayName })
       resetFormFields();
     }
     catch (error) {
-      if(error.code === 'auth/email-already-in-use'){
+      if (error.code === 'auth/email-already-in-use') {
         alert('Cannot create user, Email already in use')
-      }else{
+      } else {
         console.log('Some Error Occur', error);
       }
     }
@@ -44,25 +45,27 @@ const SignUpForm = () => {
     setFormFiedls({ ...formFields, [name]: value })
   }
   return (
-    <div>
-      <h1>Sign Up With Your Email and Password</h1>
+    <div className='sign-up-container'>
+      <h2>Don't have an account?</h2>
+      <span>Sign Up With Your Email and Password</span>
       <form onSubmit={handleSubmit} >
         <FormInput
-          label = 'Display Name' 
+          label='Display Name'
           type='text'
-          required onChange={handleChange}
+          required 
+          onChange={handleChange}
           name='displayName'
           value={displayName} />
 
         <FormInput
-          label = 'Email' 
+          label='Email'
           type='email'
           required onChange={handleChange}
           name='email'
           value={email} />
 
         <FormInput
-          label = 'Password'
+          label='Password'
           type='password'
           required
           onChange={handleChange}
@@ -70,16 +73,16 @@ const SignUpForm = () => {
           value={password} />
 
         <FormInput
-          label = 'Confirm Password'  
+          label='Confirm Password'
           type='password'
           required onChange={handleChange}
           name='confirmPassword'
           value={confirmPassword} />
 
-        <button type='submit'>Sign Up</button>
+        <Button type='submit'>Sign Up</Button>
       </form>
     </div>
   )
 }
 
-export default SignUpForm
+export default SignUpForm;

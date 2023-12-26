@@ -4,7 +4,9 @@ import {  // yaha firebase app se library ko import kiya gya hai authication or 
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+
 } from 'firebase/auth';
 // yaha kuch or library ko import kiya gya hai takay document set kar sakay get kar sakay 
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -28,8 +30,10 @@ googleProvider.getCustomParameters({ //yaha login screen ki bt ki jarahi hai k k
 });
 
 export const auth = getAuth(); // yaha hum authorized ka method call kar rahe hain 
+
 export const signInWithGooglePopup = () => 
   signInWithPopup(auth, googleProvider); // yaha hum popup se sign karte wqt signinwith popup k method me auth or provider k zariye value lyn gye  
+
 export const signInWithGoogleRedirect = () => 
   signInWithRedirect(auth, googleProvider); // yaha hum google redirect se sign karte wqt signinwith redirect k method me auth or provider k zariye value lyn gye   
 
@@ -74,5 +78,12 @@ export const createAuthUserEmailAndPassword = async (email, password) => {
   if(!email || !password) return
 
   return await createUserWithEmailAndPassword(auth, email, password);  
+
+} 
+export const signInAuthUserEmailAndPassword = async (email, password) => {
+
+  if(!email || !password) return
+
+  return await signInWithEmailAndPassword(auth, email, password);  
 
 } 
