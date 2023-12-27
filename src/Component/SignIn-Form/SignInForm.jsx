@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import FormInput from '../Form-Input/FormInput';
 import Button from '../Button/Button';
 import { signInWithGooglePopup, createUserDocumentFromAuth, signInAuthUserEmailAndPassword } from '../../Utils/Firebase/FirebaseUtils';
+import { UserContext } from '../../Contexts/UserContext';
 import './SignInForm.scss';
 
 const defaultFormFields = {
@@ -12,6 +13,7 @@ const defaultFormFields = {
 const SignInForm = () => {
   const [formFields, setFormFiedls] = useState(defaultFormFields);
   const { email, password } = formFields;
+  const {setCurrentUser} = useContext(UserContext);
 
   const resetFormFields = () => {
     setFormFiedls(defaultFormFields)
@@ -26,7 +28,7 @@ const SignInForm = () => {
       if (error.code === 'auth/popup-closed-by-user') {
         console.log('User closed the popup');
       } else {
-        console.error('Google se sign in mein error:', error);
+        console.error('Error From Google SignIn:', error);
         throw error;
       }
     }
@@ -35,12 +37,14 @@ const SignInForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await signInAuthUserEmailAndPassword(email, password);
-      console.log(response);
+      const {user} = await signInAuthUserEmailAndPassword(
+        email, 
+        password
+        );
       resetFormFields();
     }
     catch (error) { 
-      if(error.code == 'auth/invalid-credential'){
+      if(error.code === 'auth/invalid-credential'){
         alert('Email or Password is Incorrect')
       }else{
         console.log(error);

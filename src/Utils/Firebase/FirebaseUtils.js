@@ -5,8 +5,9 @@ import {  // yaha firebase app se library ko import kiya gya hai authication or 
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from 'firebase/auth';
 // yaha kuch or library ko import kiya gya hai takay document set kar sakay get kar sakay 
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -87,3 +88,6 @@ export const signInAuthUserEmailAndPassword = async (email, password) => {
   return await signInWithEmailAndPassword(auth, email, password);  
 
 } 
+export const userSignOut = async () => await signOut(auth); 
+export const onAuthStateChangedListner = (callback) => 
+onAuthStateChanged (auth, callback )
